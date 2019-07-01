@@ -1,0 +1,7 @@
+.vs
+Logs/
+Library/
+Assets/Samples
+*.txt
+*.apk
+*.swp
