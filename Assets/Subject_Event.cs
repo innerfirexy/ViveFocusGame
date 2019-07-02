@@ -20,21 +20,38 @@ public class Subject_Event : MonoBehaviour,
     Vector3 originalPos;
     // 默认输入设备为主手柄 🎮
     WaveVR_Controller.EDeviceType curFocusControllerType = WaveVR_Controller.EDeviceType.Dominant;
+    WaveVR_Controller.EDeviceType dirControllerType = WaveVR_Controller.EDeviceType.Head;
+    public bool isTouchpadDown;
+    private GameObject waveVRObj;
+    private GameObject headObj;
+    private Camera wvrCam;
 
     // Use this for initialization
     void Start () {
         originalPos = transform.position;
         //Log.d(LOG_TAG, "Start called.");
+        isTouchpadDown = false;
+
+        waveVRObj = transform.GetChild(0).gameObject;
+        headObj = waveVRObj.transform.GetChild(0).gameObject; // Can use this to get the height of camera
+        //wvrCam = wvrCam.GetComponent<Camera>();
+
+        Log.d(LOG_TAG, "child count of Subject: " + transform.childCount.ToString());
+        Log.d(LOG_TAG, "child count of WaveVR: " + waveVRObj.transform.childCount.ToString());
+        //Log.d(LOG_TAG, "child count of WaveVR: " + wvrCam.ToString());
     }
 	
 	// Update is called once per frame
 	void Update () {
-            if (WaveVR_Controller.Input(curFocusControllerType).GetPressUp(WVR_InputId.WVR_InputId_Alias1_Touchpad) ||
-            WaveVR_Controller.Input(curFocusControllerType).GetPressDown(WVR_InputId.WVR_InputId_Alias1_Digital_Trigger) ||
-            WaveVR_Controller.Input(curFocusControllerType).GetPressDown(WVR_InputId.WVR_InputId_Alias1_Trigger))
-            {
-                moveForward();
-            }
+        if (WaveVR_Controller.Input(curFocusControllerType).GetPressDown(WVR_InputId.WVR_InputId_Alias1_Touchpad)) {
+            isTouchpadDown = true;
+        } else {
+            isTouchpadDown = false;
+        }
+        if (isTouchpadDown)
+        {
+            moveForward();
+        }
 	}
 
     void moveForward()
@@ -43,6 +60,9 @@ public class Subject_Event : MonoBehaviour,
         Vector3 newPos = new Vector3(oldPos.x + 1, oldPos.y, oldPos.z);
         transform.position = newPos;
         Log.d(LOG_TAG, "moveFroward called.");
+
+        Vector3 headFwd = headObj.transform.forward;
+        Log.d(LOG_TAG, "head transform forward: " + headFwd.ToString());
     }
 
     
