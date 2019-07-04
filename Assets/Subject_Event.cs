@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using WaveVR_Log;
@@ -24,7 +25,10 @@ public class Subject_Event : MonoBehaviour,
     public bool isTouchpadDown;
     private GameObject waveVRObj;
     private GameObject headObj;
-    private Camera wvrCam;
+
+    CharacterController characterController;
+    public float speed = 6.0f;
+    private Vector3 moveDirection = Vector3.zero;
 
     // Use this for initialization
     void Start () {
@@ -34,38 +38,42 @@ public class Subject_Event : MonoBehaviour,
 
         waveVRObj = transform.GetChild(0).gameObject;
         headObj = waveVRObj.transform.GetChild(0).gameObject; // Can use this to get the height of camera
-        //wvrCam = wvrCam.GetComponent<Camera>();
+        characterController = GetComponent<CharacterController>();
 
         Log.d(LOG_TAG, "child count of Subject: " + transform.childCount.ToString());
         Log.d(LOG_TAG, "child count of WaveVR: " + waveVRObj.transform.childCount.ToString());
-        //Log.d(LOG_TAG, "child count of WaveVR: " + wvrCam.ToString());
+        Log.d(LOG_TAG, "isTouchpadDown: " + isTouchpadDown);
+        //DebugInfo();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (WaveVR_Controller.Input(curFocusControllerType).GetPressDown(WVR_InputId.WVR_InputId_Alias1_Touchpad)) {
+        if (WaveVR_Controller.Input(curFocusControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Touchpad)) {
             isTouchpadDown = true;
         } else {
             isTouchpadDown = false;
         }
+
         if (isTouchpadDown)
         {
             moveForward();
+            //DebugInfo();
         }
 	}
 
-    void moveForward()
+    void DebugInfo()
     {
-        Vector3 oldPos = transform.position;
-        Vector3 newPos = new Vector3(oldPos.x + 1, oldPos.y, oldPos.z);
-        transform.position = newPos;
-        Log.d(LOG_TAG, "moveFroward called.");
-
         Vector3 headFwd = headObj.transform.forward;
         Log.d(LOG_TAG, "head transform forward: " + headFwd.ToString());
     }
 
-    
+    void moveForward()
+    {
+        moveDirection = headObj.transform.forward;
+        moveDirection.y = 0f;
+        moveDirection *= speed;
+        characterController.Move(moveDirection * Time.deltaTime);
+    }
 
     public void OnPointerUp(PointerEventData eventData)
     {

@@ -262,6 +262,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\Misc\IME\Scripts\EventButton.cs" />
     <Compile Include="Assets\Misc\IME\Scripts\KeyboardManager.cs" />
     <Compile Include="Assets\Misc\IME\Scripts\Keyboards\AbstractKeyboard.cs" />
@@ -355,6 +356,7 @@
     <Compile Include="Assets\Samples\VirtualWall_Test\scripts\virtualWallHandle.cs" />
     <Compile Include="Assets\Samples\VRTestApp\Scripes\MasterSceneManager.cs" />
     <Compile Include="Assets\Subject_Event.cs" />
+    <Compile Include="Assets\Wall.cs" />
     <Compile Include="Assets\WaveVR\Extra\Beam.cs" />
     <Compile Include="Assets\WaveVR\Extra\commit_info.cs" />
     <Compile Include="Assets\WaveVR\Extra\ControllerConnectionStateReactor.cs" />
