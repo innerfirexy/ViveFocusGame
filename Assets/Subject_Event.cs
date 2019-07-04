@@ -20,14 +20,15 @@ public class Subject_Event : MonoBehaviour,
     private const string LOG_TAG = "WaveVR_Subject";
     Vector3 originalPos;
     // 默认输入设备为主手柄 🎮
-    WaveVR_Controller.EDeviceType curFocusControllerType = WaveVR_Controller.EDeviceType.Dominant;
-    WaveVR_Controller.EDeviceType dirControllerType = WaveVR_Controller.EDeviceType.Head;
-    public bool isTouchpadDown;
+    WaveVR_Controller.EDeviceType mainControllerType = WaveVR_Controller.EDeviceType.Dominant;
+    
+    private bool isTouchpadDown;
+    private bool isTriggerDown;
     private GameObject waveVRObj;
     private GameObject headObj;
 
     CharacterController characterController;
-    public float speed = 6.0f;
+    public float speed = 8.0f;
     private Vector3 moveDirection = Vector3.zero;
 
     // Use this for initialization
@@ -35,6 +36,7 @@ public class Subject_Event : MonoBehaviour,
         originalPos = transform.position;
         //Log.d(LOG_TAG, "Start called.");
         isTouchpadDown = false;
+        isTriggerDown = false;
 
         waveVRObj = transform.GetChild(0).gameObject;
         headObj = waveVRObj.transform.GetChild(0).gameObject; // Can use this to get the height of camera
@@ -48,16 +50,25 @@ public class Subject_Event : MonoBehaviour,
 	
 	// Update is called once per frame
 	void Update () {
-        if (WaveVR_Controller.Input(curFocusControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Touchpad)) {
+        if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Touchpad)) {
             isTouchpadDown = true;
         } else {
             isTouchpadDown = false;
         }
 
-        if (isTouchpadDown)
+        if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Trigger)) {
+            isTriggerDown = true;
+        } else {
+            isTriggerDown = false;
+        }
+
+        // Move
+        if (isTouchpadDown && !isTriggerDown) {
+            Move(true);
+        }
+        if (!isTouchpadDown && isTriggerDown)
         {
-            moveForward();
-            //DebugInfo();
+            Move(false);
         }
 	}
 
@@ -67,10 +78,15 @@ public class Subject_Event : MonoBehaviour,
         Log.d(LOG_TAG, "head transform forward: " + headFwd.ToString());
     }
 
-    void moveForward()
+    void Move(bool isForward)
     {
+        
         moveDirection = headObj.transform.forward;
-        moveDirection.y = 0f;
+        if (!isForward) {
+            moveDirection.Set(-moveDirection.x, 0f, -moveDirection.z);
+        } else {
+            moveDirection.y = 0f;
+        }
         moveDirection *= speed;
         characterController.Move(moveDirection * Time.deltaTime);
     }
