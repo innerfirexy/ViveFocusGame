@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using WaveVR_Log;
 using wvr;
 
-public class Subject_Event : MonoBehaviour,
+public class SubjectEvent : MonoBehaviour,
     IPointerUpHandler,
     IPointerEnterHandler,
     IPointerExitHandler,
@@ -66,8 +66,7 @@ public class Subject_Event : MonoBehaviour,
         if (isTouchpadDown && !isTriggerDown) {
             Move(true);
         }
-        if (!isTouchpadDown && isTriggerDown)
-        {
+        if (!isTouchpadDown && isTriggerDown) {
             Move(false);
         }
 	}
