@@ -53,5 +53,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallPrefab: {fileID: 1292112793444998, guid: d744b557c01ea4932a35d8a4f63dc674, type: 2}
   wallWidth: 10
-  wallHeight: 20
-  roomRadius: 100
+  wallHeight: 30
+  wallYOffset: -5
+  roomRadius: 150

@@ -42,9 +42,9 @@ public class SubjectEvent : MonoBehaviour,
         headObj = waveVRObj.transform.GetChild(0).gameObject; // Can use this to get the height of camera
         characterController = GetComponent<CharacterController>();
 
-        Log.d(LOG_TAG, "child count of Subject: " + transform.childCount.ToString());
-        Log.d(LOG_TAG, "child count of WaveVR: " + waveVRObj.transform.childCount.ToString());
-        Log.d(LOG_TAG, "isTouchpadDown: " + isTouchpadDown);
+        //Log.d(LOG_TAG, "child count of Subject: " + transform.childCount.ToString());
+        //Log.d(LOG_TAG, "child count of WaveVR: " + waveVRObj.transform.childCount.ToString());
+        //Log.d(LOG_TAG, "isTouchpadDown: " + isTouchpadDown);
         //DebugInfo();
     }
 	
