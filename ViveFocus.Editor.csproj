@@ -350,6 +350,7 @@
     <None Include="Assets\WaveVR\Resources\WaveVR_Distortion.shader" />
     <None Include="Assets\WaveVR\Resources\WaveVR_RenderMask.shader" />
     <None Include="Assets\WaveVR\Resources\WaveVR_Reticle.shader" />
+    <None Include="Assets\Yurowm\ReadMe.txt" />
     <None Include="Assets\Yurowm\Shaders\SkinShader.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

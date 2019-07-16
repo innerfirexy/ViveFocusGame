@@ -13,13 +13,14 @@ public class Bot : MonoBehaviour,
     private const string LOG_TAG = "WaveVR_Bot";
     public bool isControllerFocus;
     WaveVR_Controller.EDeviceType mainControllerType = WaveVR_Controller.EDeviceType.Dominant;
-    private GameObject m_Controller;
+    private CanvasGroup canvasGroup;
 
 
 	// Use this for initialization
 	void Start () {
         //Log.d(LOG_TAG, "Bot started");
         isControllerFocus = false;
+        canvasGroup = GetComponent<CanvasGroup>();
 	}
 	
 	// Update is called once per frame
@@ -27,45 +28,31 @@ public class Bot : MonoBehaviour,
         //if (isControllerFocus) {
         //    GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
         //}
-        //else {
-        //    GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
-        //}
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        Log.d(LOG_TAG, "OnPointerEnter: " + eventData.enterEventCamera.gameObject);
-
-        //WaveVR_Controller.EDeviceType type = eventData.enterEventCamera.gameObject.GetComponent<WaveVR_PoseTrackerManager>().Type;
-        //GameObject target = eventData.enterEventCamera.gameObject;
-
-        //if (target.GetComponent<WaveVR_PoseTrackerManager>()) {
-        //    if (type == WaveVR_Controller.EDeviceType.Dominant) {
-        //        m_Controller = target;
-        //        isControllerFocus = true;
-        //    }
-        //}
-        GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
+        //Log.d(LOG_TAG, "OnPointerEnter: " + eventData.enterEventCamera.gameObject);
+        isControllerFocus = true;
+        ShowCanvas();
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        Log.d(LOG_TAG, "OnPointerExit: " + eventData.enterEventCamera.gameObject);
-
-        //WaveVR_Controller.EDeviceType type = eventData.enterEventCamera.gameObject.GetComponent<WaveVR_PoseTrackerManager>().Type;
-        //GameObject target = eventData.enterEventCamera.gameObject;
-
-        //if (target.GetComponent<WaveVR_PoseTrackerManager>()) {
-        //    if (type == WaveVR_Controller.EDeviceType.Dominant){
-        //        m_Controller = target;
-        //        isControllerFocus = false;
-        //    }
-        //}
-        //isControllerFocus = false;
-        GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
+        //Log.d(LOG_TAG, "OnPointerExit: " + eventData.enterEventCamera.gameObject);
+        isControllerFocus = false;
+        HideCanvas();
     }
 
     public void OnPointerHover(PointerEventData eventData) {
         //Log.d(LOG_TAG, "OnPointerHover: " + eventData.enterEventCamera.gameObject);
     }
 
-    
+    private void HideCanvas() {
+        canvasGroup.alpha = 0f; //this makes everything transparent
+        canvasGroup.blocksRaycasts = false; //this prevents the UI element to receive input events
+    }
+
+    private void ShowCanvas() {
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+    }
 }

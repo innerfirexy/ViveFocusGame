@@ -11,7 +11,6 @@ public class Actions : MonoBehaviour {
 
 	void Awake () {
 		animator = GetComponent<Animator> ();
-		Debug.LogWarning(string.Format("animator:{0}", animator));
 	}
 
 	public void Stay () {
