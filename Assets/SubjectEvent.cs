@@ -79,7 +79,6 @@ public class SubjectEvent : MonoBehaviour,
 
     void Move(bool isForward)
     {
-        
         moveDirection = headObj.transform.forward;
         if (!isForward) {
             moveDirection.Set(-moveDirection.x, 0f, -moveDirection.z);
@@ -88,6 +87,21 @@ public class SubjectEvent : MonoBehaviour,
         }
         moveDirection *= speed;
         characterController.Move(moveDirection * Time.deltaTime);
+    }
+
+    public Vector3 GetForward()
+    {
+        return headObj.transform.forward;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return headObj.transform.position;
+    }
+
+    public Transform GetHeadTransform()
+    {
+        return headObj.transform;
     }
 
     public void OnPointerUp(PointerEventData eventData)

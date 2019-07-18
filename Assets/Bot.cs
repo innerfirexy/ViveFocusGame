@@ -17,9 +17,14 @@ public class Bot : MonoBehaviour,
     private bool isControllerFocus;
     private bool isSaved;
     private bool isReachable;
+    private GameObject subjectGO;
+    private SubjectEvent subject;
+
     WaveVR_Controller.EDeviceType mainControllerType = WaveVR_Controller.EDeviceType.Dominant;
     private CanvasGroup canvasGroup;
+    private Transform canvasTrans;
 
+    private Transform barTrans;
     private Image barImage;
     private Progress progress;
 
@@ -27,21 +32,23 @@ public class Bot : MonoBehaviour,
         isControllerFocus = false;
         isSaved = false;
         isReachable = true;
+        subjectGO = GameObject.Find("/Subject");
+        subject = subjectGO.GetComponent<SubjectEvent>();
+
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
+        canvasTrans = transform.GetChild(0).GetChild(3);
 
-        barImage = GameObject.Find("bar").GetComponent<Image>();
+        barTrans = transform.GetChild(0).GetChild(3).GetChild(1).GetChild(2);
+        barImage = barTrans.gameObject.GetComponent<Image>();
         //⚠️ Not clear why transform.Find("bar") causes problem here.
         barImage.fillAmount = 0.05f;
         progress = new Progress();
 
-        //Log.d(LOG_TAG, "Bot started");
-        //Log.d(LOG_TAG, "barImage: " + barImage.ToString());
-        //Log.d(LOG_TAG, "barImage fillAmount: " + barImage.fillAmount.ToString());
-        //Debug.Log("Bot started");
-        //Debug.Log("barImage: " + barImage.ToString());
-        //Debug.Log("barImage fillAmount: " + barImage.fillAmount.ToString());
+        Log.d(LOG_TAG, "barTrans: " + barTrans.ToString());
+        Log.d(LOG_TAG, "barImage: " + barImage.ToString());
+        Log.d(LOG_TAG, "canvasTrans: " + canvasTrans.ToString());
     }
 
     // Update is called once per frame
@@ -73,10 +80,6 @@ public class Bot : MonoBehaviour,
         //Log.d(LOG_TAG, "OnPointerEnter: " + eventData.enterEventCamera.gameObject);
         isControllerFocus = true;
         ShowCanvas();
-
-        //Make the canvas face towards the VR camera
-        GameObject target = eventData.enterEventCamera.gameObject;
-        Log.d(LOG_TAG, "onPointerEventData target: " + target.transform.localPosition.ToString());
     }
 
     public void OnPointerExit(PointerEventData eventData) {
@@ -91,7 +94,12 @@ public class Bot : MonoBehaviour,
     }
 
     public void OnPointerHover(PointerEventData eventData) {
-        //Log.d(LOG_TAG, "OnPointerHover: " + eventData.enterEventCamera.gameObject);
+        //Make the canvas face towards the VR camera
+        Transform headTrans = subject.GetHeadTransform();
+        Vector3 relativePos = -(headTrans.position - canvasTrans.position);
+        Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+        canvasTrans.rotation = rotation;
+        //Log.d(LOG_TAG, "head position: " + headTrans.position.ToString());
     }
 
     private void HideCanvas() {
