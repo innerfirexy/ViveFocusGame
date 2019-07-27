@@ -74,6 +74,14 @@ public class Bot : MonoBehaviour,
             }
             //Use else to handle isReachable == false
         }
+        else
+        {
+            BecomeSaved();
+        }
+    }
+
+    private void BecomeSaved() {
+        gameObject.SetActive(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData) {

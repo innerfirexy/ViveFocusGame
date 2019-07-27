@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
     public Room1 room1Prefab;
     private Room2 room2Instance;
 
+    public GameObject botPrefab;
+
 	// Use this for initialization
 	void Start () {
         BeginGame();
@@ -20,6 +22,7 @@ public class GameManager : MonoBehaviour {
         if (roomType == 1) {
             room1Instance = Instantiate(room1Prefab);
         }
+        SpawnBot();
     }
 
     private void EndGame() {
@@ -30,6 +33,24 @@ public class GameManager : MonoBehaviour {
         if (room2Instance != null) {
             Destroy(room1Instance);
         }
+    }
+
+    private void SpawnBot()
+    {
+        Vector3 pos = new Vector3(20f, 0f, 40f);
+        float angleDegrees = 45f;
+        Quaternion rot = Quaternion.Euler(0, angleDegrees, 0);
+        Instantiate(botPrefab, pos, rot);
+
+        pos = new Vector3(50f, 0f, 60f);
+        angleDegrees = 90f;
+        rot = Quaternion.Euler(0, angleDegrees, 0);
+        Instantiate(botPrefab, pos, rot);
+
+        pos = new Vector3(20f, 0f, 10f);
+        angleDegrees = 120f;
+        rot = Quaternion.Euler(0, angleDegrees, 0);
+        Instantiate(botPrefab, pos, rot);
     }
 
     void Update()
