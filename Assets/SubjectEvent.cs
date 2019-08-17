@@ -26,6 +26,7 @@ public class SubjectEvent : MonoBehaviour,
     private bool isTriggerDown;
     private GameObject waveVRObj;
     private GameObject headObj;
+    private GameObject headCamera;
 
     CharacterController characterController;
     public float speed = 8.0f;

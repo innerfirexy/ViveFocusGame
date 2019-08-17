@@ -5,16 +5,27 @@ using System.Collections;
 using wvr;
 
 
-[RequireComponent(typeof(Text))]
-public class DebugInfoEvent : MonoBehaviour {
+public class HeadCanvas : MonoBehaviour {
+    private GameObject FPS;
     private Text textField;
+    private GameObject minimapCanvas;
+    private GameObject minimapCameraObj;
+    private Camera minimapCamera;
+
     WaveVR_Controller.EDeviceType mainControllerType = WaveVR_Controller.EDeviceType.Dominant;
     private string logMsg;
     private Queue logMsgQueue = new Queue();
 
     void Awake()
     {
-        textField = GetComponent<Text>();
+        FPS = transform.GetChild(0).gameObject;
+        textField = FPS.GetComponent<Text>();
+        textField.text = "";
+        minimapCanvas = transform.GetChild(1).gameObject;
+        //minimapCanvas.SetActive(true);
+        minimapCameraObj = GameObject.Find("/Subject/WaveVR/head/Minimap Camera");
+        minimapCamera = minimapCameraObj.GetComponent<Camera>();
+        minimapCamera.enabled = true;
     }
 
     void OnEnable() {
@@ -39,6 +50,8 @@ public class DebugInfoEvent : MonoBehaviour {
         //{
         //    textField.text = "Press on Touchpad";
         //}
-        textField.text = logMsg;
+        //textField.text = minimapCamera.enabled.ToString();
+        minimapCameraObj.transform.rotation = Quaternion.Euler(90,0,0);
+        textField.text = minimapCameraObj.transform.rotation.ToString();
     }
 }

@@ -263,8 +263,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Bot.cs" />
-    <Compile Include="Assets\DebugInfoEvent.cs" />
     <Compile Include="Assets\GameManager.cs" />
+    <Compile Include="Assets\HeadCanvas.cs" />
     <Compile Include="Assets\Misc\IME\Scripts\EventButton.cs" />
     <Compile Include="Assets\Misc\IME\Scripts\KeyboardManager.cs" />
     <Compile Include="Assets\Misc\IME\Scripts\Keyboards\AbstractKeyboard.cs" />
