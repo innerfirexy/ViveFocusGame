@@ -5,6 +5,7 @@ using System.Collections;
 using wvr;
 
 
+[RequireComponent(typeof(CanvasGroup))]
 public class HeadCanvas : MonoBehaviour {
     private GameObject FPS;
     private Text textField;
@@ -13,6 +14,7 @@ public class HeadCanvas : MonoBehaviour {
     private Camera minimapCamera;
 
     WaveVR_Controller.EDeviceType mainControllerType = WaveVR_Controller.EDeviceType.Dominant;
+    private CanvasGroup canvasGroup;
     private string logMsg;
     private Queue logMsgQueue = new Queue();
 
@@ -23,9 +25,13 @@ public class HeadCanvas : MonoBehaviour {
         textField.text = "";
         minimapCanvas = transform.GetChild(1).gameObject;
         //minimapCanvas.SetActive(true);
-        minimapCameraObj = GameObject.Find("/Subject/WaveVR/head/Minimap Camera");
-        minimapCamera = minimapCameraObj.GetComponent<Camera>();
-        minimapCamera.enabled = true;
+        //minimapCameraObj = GameObject.Find("/Subject/WaveVR/head/Minimap Camera");
+        //minimapCamera = minimapCameraObj.GetComponent<Camera>();
+        //minimapCamera.enabled = true;
+
+        canvasGroup = GetComponent<CanvasGroup>();
+        canvasGroup.alpha = 0f;
+        canvasGroup.blocksRaycasts = false;
     }
 
     void OnEnable() {
@@ -51,7 +57,24 @@ public class HeadCanvas : MonoBehaviour {
         //    textField.text = "Press on Touchpad";
         //}
         //textField.text = minimapCamera.enabled.ToString();
-        minimapCameraObj.transform.rotation = Quaternion.Euler(90,0,0);
-        textField.text = minimapCameraObj.transform.rotation.ToString();
+
+        //Show minimap or not
+        if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Menu)) {
+            ShowCanvas();
+        } else {
+            HideCanvas();
+        }
+    }
+
+    private void HideCanvas()
+    {
+        canvasGroup.alpha = 0f; //this makes everything transparent
+        canvasGroup.blocksRaycasts = false; //this prevents the UI element to receive input events
+    }
+
+    private void ShowCanvas()
+    {
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
     }
 }

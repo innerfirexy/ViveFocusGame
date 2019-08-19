@@ -606,6 +606,7 @@ GameObject:
   - component: {fileID: 654897261}
   - component: {fileID: 654897260}
   - component: {fileID: 654897256}
+  - component: {fileID: 654897262}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: EventCanvas
@@ -724,6 +725,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 654897255}
+--- !u!225 &654897262
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 654897255}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &727252904
 GameObject:
   m_ObjectHideFlags: 0
