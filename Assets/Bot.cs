@@ -46,9 +46,9 @@ public class Bot : MonoBehaviour,
         barImage.fillAmount = 0.05f;
         progress = new Progress();
 
-        Log.d(LOG_TAG, "barTrans: " + barTrans.ToString());
-        Log.d(LOG_TAG, "barImage: " + barImage.ToString());
-        Log.d(LOG_TAG, "canvasTrans: " + canvasTrans.ToString());
+        //Log.d(LOG_TAG, "barTrans: " + barTrans.ToString());
+        //Log.d(LOG_TAG, "barImage: " + barImage.ToString());
+        //Log.d(LOG_TAG, "canvasTrans: " + canvasTrans.ToString());
     }
 
     // Update is called once per frame

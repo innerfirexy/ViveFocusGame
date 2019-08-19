@@ -2,7 +2,6 @@
 Logs/
 Library/
 Temp/
-Assets/Samples
 *.txt
 *.apk
 *.swp
