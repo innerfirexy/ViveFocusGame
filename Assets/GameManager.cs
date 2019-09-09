@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     private Room2 room2Instance;
 
     public GameObject botPrefab;
+    private List<Vector3> botPositions;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +23,13 @@ public class GameManager : MonoBehaviour {
         if (roomType == 1) {
             room1Instance = Instantiate(room1Prefab);
         }
+
+        // Define bot positions
+        botPositions = new List<Vector3> {
+            new Vector3(20f, 0f, 40f),
+        };
+
+        // Spawn
         SpawnBot();
     }
 

@@ -18,6 +18,10 @@ public class HeadCanvas : MonoBehaviour {
     private string logMsg;
     private Queue logMsgQueue = new Queue();
 
+    private bool showMinimap;
+    private Texture textureA;
+    private Texture2D textureB;
+
     void Awake()
     {
         FPS = transform.GetChild(0).gameObject;
@@ -32,6 +36,8 @@ public class HeadCanvas : MonoBehaviour {
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
+
+        showMinimap = false;
     }
 
     void OnEnable() {
@@ -61,8 +67,10 @@ public class HeadCanvas : MonoBehaviour {
         //Show minimap or not
         if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Menu)) {
             ShowCanvas();
+            showMinimap = true;
         } else {
             HideCanvas();
+            showMinimap = false;
         }
     }
 
