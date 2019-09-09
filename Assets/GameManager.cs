@@ -48,17 +48,17 @@ public class GameManager : MonoBehaviour {
         Vector3 pos = new Vector3(20f, 0f, 40f);
         float angleDegrees = 45f;
         Quaternion rot = Quaternion.Euler(0, angleDegrees, 0);
-        Instantiate(botPrefab, pos, rot);
+        GameObject bot1 = Instantiate(botPrefab, pos, rot);
 
         pos = new Vector3(50f, 0f, 60f);
         angleDegrees = 90f;
         rot = Quaternion.Euler(0, angleDegrees, 0);
-        Instantiate(botPrefab, pos, rot);
+        GameObject bot2 = Instantiate(botPrefab, pos, rot);
 
         pos = new Vector3(20f, 0f, 10f);
         angleDegrees = 120f;
         rot = Quaternion.Euler(0, angleDegrees, 0);
-        Instantiate(botPrefab, pos, rot);
+        GameObject bot3 = Instantiate(botPrefab, pos, rot);
     }
 
     void Update()

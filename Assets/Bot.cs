@@ -13,12 +13,15 @@ public class Bot : MonoBehaviour,
     IPointerExitHandler,
     IPointerHoverHandler
 {
+    public int botID;
     private const string LOG_TAG = "WaveVR_Bot";
     private bool isControllerFocus;
     private bool isSaved;
     private bool isReachable;
+
     private GameObject subjectGO;
     private SubjectEvent subject;
+    private GameObject gameManagerGO;
 
     WaveVR_Controller.EDeviceType mainControllerType = WaveVR_Controller.EDeviceType.Dominant;
     private CanvasGroup canvasGroup;
@@ -32,8 +35,10 @@ public class Bot : MonoBehaviour,
         isControllerFocus = false;
         isSaved = false;
         isReachable = true;
+
         subjectGO = GameObject.Find("/Subject");
         subject = subjectGO.GetComponent<SubjectEvent>();
+        gameManagerGO = GameObject.Find("/Game Manager");
 
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
@@ -82,6 +87,8 @@ public class Bot : MonoBehaviour,
 
     private void BecomeSaved() {
         gameObject.SetActive(false);
+        subjectGO.BroadcastMessage("BC_BotSaved", botID, SendMessageOptions.DontRequireReceiver);
+        gameManagerGO.BroadcastMessage("BC_BotSaved", botID, SendMessageOptions.DontRequireReceiver);
     }
 
     public void OnPointerEnter(PointerEventData eventData) {

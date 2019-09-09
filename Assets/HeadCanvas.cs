@@ -18,26 +18,16 @@ public class HeadCanvas : MonoBehaviour {
     private string logMsg;
     private Queue logMsgQueue = new Queue();
 
-    private bool showMinimap;
-    private Texture textureA;
-    private Texture2D textureB;
-
     void Awake()
     {
         FPS = transform.GetChild(0).gameObject;
         textField = FPS.GetComponent<Text>();
         textField.text = "";
         minimapCanvas = transform.GetChild(1).gameObject;
-        //minimapCanvas.SetActive(true);
-        //minimapCameraObj = GameObject.Find("/Subject/WaveVR/head/Minimap Camera");
-        //minimapCamera = minimapCameraObj.GetComponent<Camera>();
-        //minimapCamera.enabled = true;
 
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
-
-        showMinimap = false;
     }
 
     void OnEnable() {
@@ -67,10 +57,8 @@ public class HeadCanvas : MonoBehaviour {
         //Show minimap or not
         if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Menu)) {
             ShowCanvas();
-            showMinimap = true;
         } else {
             HideCanvas();
-            showMinimap = false;
         }
     }
 
@@ -84,5 +72,15 @@ public class HeadCanvas : MonoBehaviour {
     {
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+    }
+
+    private void BC_PlayerMoved(Transform headTransform)
+    {
+        textField.text = "BC_PlayerMoved triggered";
+    }
+
+    private void BC_BotSaved(int botID)
+    {
+        textField.text = "BC_BotSaved triggered";
     }
 }

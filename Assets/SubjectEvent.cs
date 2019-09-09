@@ -64,11 +64,13 @@ public class SubjectEvent : MonoBehaviour,
         }
 
         // Move
-        if (isTouchpadDown && !isTriggerDown) {
+        if (isTouchpadDown && !isTriggerDown) { // Move forward
             Move(true);
+            BroadcastMessage("BC_PlayerMoved", GetHeadTransform(), SendMessageOptions.DontRequireReceiver);
         }
-        if (!isTouchpadDown && isTriggerDown) {
+        if (!isTouchpadDown && isTriggerDown) { // Move backward
             Move(false);
+            BroadcastMessage("BC_PlayerMoved", GetHeadTransform(), SendMessageOptions.DontRequireReceiver);
         }
 	}
 
