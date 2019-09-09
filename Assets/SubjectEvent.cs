@@ -32,6 +32,10 @@ public class SubjectEvent : MonoBehaviour,
     public float speed = 8.0f;
     private Vector3 moveDirection = Vector3.zero;
 
+    // Action status
+    public enum ActionStatus { Walk, Save };
+    public ActionStatus actStat = ActionStatus.Walk;
+
     // Use this for initialization
     void Start () {
         originalPos = transform.position;

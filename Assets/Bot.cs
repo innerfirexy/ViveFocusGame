@@ -95,6 +95,11 @@ public class Bot : MonoBehaviour,
         //Log.d(LOG_TAG, "OnPointerEnter: " + eventData.enterEventCamera.gameObject);
         isControllerFocus = true;
         ShowCanvas();
+
+        if (isReachable)
+        {
+            subject.actStat = SubjectEvent.ActionStatus.Save;
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
