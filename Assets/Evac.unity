@@ -937,6 +937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 12
+  actStat: 0
 --- !u!143 &985001454
 CharacterController:
   m_ObjectHideFlags: 0

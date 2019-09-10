@@ -70,11 +70,9 @@ public class SubjectEvent : MonoBehaviour,
         // Move
         if (isTouchpadDown && !isTriggerDown) { // Move forward
             Move(true);
-            BroadcastMessage("BC_PlayerMoved", GetHeadTransform(), SendMessageOptions.DontRequireReceiver);
         }
         if (!isTouchpadDown && isTriggerDown) { // Move backward
             Move(false);
-            BroadcastMessage("BC_PlayerMoved", GetHeadTransform(), SendMessageOptions.DontRequireReceiver);
         }
 	}
 
@@ -94,6 +92,11 @@ public class SubjectEvent : MonoBehaviour,
         }
         moveDirection *= speed;
         characterController.Move(moveDirection * Time.deltaTime);
+
+        // Broadcast the player moving message
+        BroadcastMessage("BC_PlayerMoved",
+            GetHeadTransform(),
+            SendMessageOptions.DontRequireReceiver);
     }
 
     public Vector3 GetForward()
@@ -106,10 +109,22 @@ public class SubjectEvent : MonoBehaviour,
         return headObj.transform.position;
     }
 
+    public Vector2 GetPosition2D()
+    {
+        return new Vector2(headObj.transform.position.x,
+            headObj.transform.position.z);
+    }
+
     public Transform GetHeadTransform()
     {
         return headObj.transform;
     }
+
+    private void BC_BotSaved(int botID) {
+
+    }
+
+
 
     public void OnPointerUp(PointerEventData eventData)
     {

@@ -14,6 +14,7 @@ public class Bot : MonoBehaviour,
     IPointerHoverHandler
 {
     public int botID;
+    public float reachableDistance = 50f;
     private const string LOG_TAG = "WaveVR_Bot";
     private bool isControllerFocus;
     private bool isSaved;
@@ -94,23 +95,22 @@ public class Bot : MonoBehaviour,
     public void OnPointerEnter(PointerEventData eventData) {
         //Log.d(LOG_TAG, "OnPointerEnter: " + eventData.enterEventCamera.gameObject);
         isControllerFocus = true;
-        ShowCanvas();
-
-        if (isReachable)
-        {
+        isReachable = checkReachable();
+        if (isReachable) {
             subject.actStat = SubjectEvent.ActionStatus.Save;
         }
+        ShowCanvas();
     }
 
     public void OnPointerExit(PointerEventData eventData) {
         //Log.d(LOG_TAG, "OnPointerExit: " + eventData.enterEventCamera.gameObject);
         isControllerFocus = false;
-        HideCanvas();
-
+        subject.actStat = SubjectEvent.ActionStatus.Walk;
         if (!isSaved) {
             progress.Reset();
             barImage.fillAmount = progress.GetProgressNorm();
         }
+        HideCanvas();
     }
 
     public void OnPointerHover(PointerEventData eventData) {
@@ -130,6 +130,17 @@ public class Bot : MonoBehaviour,
     private void ShowCanvas() {
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+    }
+
+    private bool checkReachable()
+    {
+        Vector2 subjectPos = subject.GetPosition2D();
+        Vector2 myPos = new Vector2(transform.position.x, transform.position.z);
+        if (Vector2.Distance(subjectPos, myPos) <= reachableDistance) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

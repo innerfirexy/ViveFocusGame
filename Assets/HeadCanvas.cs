@@ -18,6 +18,16 @@ public class HeadCanvas : MonoBehaviour {
     private string logMsg;
     private Queue logMsgQueue = new Queue();
 
+    private GameObject miniPlayerGO;
+    private RectTransform miniPlayerRect;
+    private float miniX0; // horizontal direction in minimap
+    private float miniY0; // vertical direction in minimap
+    private float miniScale;
+    private Vector2 miniSource;
+    private float sceneX0; // maps to miniX0
+    private float sceneZ0; // maps to miniY0
+    private Vector2 sceneSource;
+
     void Awake()
     {
         FPS = transform.GetChild(0).gameObject;
@@ -28,6 +38,16 @@ public class HeadCanvas : MonoBehaviour {
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
+
+        miniPlayerGO = transform.Find("Player").gameObject;
+        miniPlayerRect = miniPlayerGO.GetComponent<RectTransform>();
+        miniX0 = -65f;
+        miniY0 = -15f;
+        miniScale = 150f/150f;
+        miniSource = new Vector2(miniX0, miniY0);
+        sceneX0 = 5; 
+        sceneZ0 = 5;
+        sceneSource = new Vector2(sceneX0, sceneZ0);
     }
 
     void OnEnable() {
@@ -74,13 +94,30 @@ public class HeadCanvas : MonoBehaviour {
         canvasGroup.blocksRaycasts = true;
     }
 
-    private void BC_PlayerMoved(Transform headTransform)
+    private void BC_PlayerMoved(Transform tr)
     {
-        textField.text = "BC_PlayerMoved triggered";
+        //textField.text = "BC_PlayerMoved triggered";
+        textField.text = string.Format("player position: ({0}, {1})",
+            miniPlayerRect.localPosition.x, miniPlayerRect.localPosition.y);
+
+        Vector2 currScenePos = new Vector2(tr.position.x, tr.position.z);
+        Vector2 vec = currScenePos - sceneSource;
+        Vector2 miniNew = miniScale * vec + miniSource;
+        float miniX1 = miniNew.x;
+        float miniY1 = miniNew.y;
+
+        float oldZ = miniPlayerRect.localPosition.z;
+        miniPlayerRect.localPosition = new Vector3(miniX1, miniY1, oldZ);
+
+        float degrees = Vector3.Angle(Vector3.forward, tr.forward);
+        if (Vector3.Cross(Vector3.forward, tr.forward).y > 0) {
+            degrees = -degrees;
+        }
+        miniPlayerRect.localRotation = Quaternion.Euler(0f, 0f, degrees);
     }
 
     private void BC_BotSaved(int botID)
     {
-        textField.text = "BC_BotSaved triggered";
+        textField.text = string.Format("Bot #{0} saved", botID);
     }
 }
