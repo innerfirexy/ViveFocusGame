@@ -10,11 +10,15 @@ using wvr;
 [RequireComponent(typeof(CanvasGroup))]
 public class Bot : MonoBehaviour,
     IPointerEnterHandler,
-    IPointerExitHandler,
-    IPointerHoverHandler
+    IPointerExitHandler
+    //IPointerHoverHandler
 {
     public int botID;
-    public float reachableDistance = 50f;
+    public float reachableDistance = 10f;
+    public float posX;
+    public float posZ;
+    private Vector2 myPos;
+
     private const string LOG_TAG = "WaveVR_Bot";
     private bool isControllerFocus;
     private bool isSaved;
@@ -35,7 +39,8 @@ public class Bot : MonoBehaviour,
 	void Start () {
         isControllerFocus = false;
         isSaved = false;
-        isReachable = true;
+        isReachable = false;
+        myPos = new Vector2(posX, posZ);
 
         subjectGO = GameObject.Find("/Subject");
         subject = subjectGO.GetComponent<SubjectEvent>();
@@ -59,11 +64,9 @@ public class Bot : MonoBehaviour,
 
     // Update is called once per frame
     void Update () {
-        if (!isSaved)
-        {
-            if (isControllerFocus && isReachable)
-            {
-                if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Menu))
+        if (!isSaved) {
+            if (isControllerFocus && isReachable) {
+                if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Touchpad))
                 {
                     progress.Update();
                     barImage.fillAmount = progress.GetProgressNorm();
@@ -72,7 +75,7 @@ public class Bot : MonoBehaviour,
                         isSaved = true;
                     }
                 }
-                if (WaveVR_Controller.Input(mainControllerType).GetPressUp(WVR_InputId.WVR_InputId_Alias1_Menu))
+                if (WaveVR_Controller.Input(mainControllerType).GetPressUp(WVR_InputId.WVR_InputId_Alias1_Touchpad))
                 {
                     progress.Reset();
                     barImage.fillAmount = progress.GetProgressNorm();
@@ -80,8 +83,7 @@ public class Bot : MonoBehaviour,
             }
             //Use else to handle isReachable == false
         }
-        else
-        {
+        else {
             BecomeSaved();
         }
     }
@@ -90,16 +92,17 @@ public class Bot : MonoBehaviour,
         gameObject.SetActive(false);
         subjectGO.BroadcastMessage("BC_BotSaved", botID, SendMessageOptions.DontRequireReceiver);
         gameManagerGO.BroadcastMessage("BC_BotSaved", botID, SendMessageOptions.DontRequireReceiver);
+        subject.actStat = SubjectEvent.ActionStatus.Walk;
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
         //Log.d(LOG_TAG, "OnPointerEnter: " + eventData.enterEventCamera.gameObject);
         isControllerFocus = true;
-        isReachable = checkReachable();
+        isReachable = checkSubjectReachable();
         if (isReachable) {
             subject.actStat = SubjectEvent.ActionStatus.Save;
+            ShowCanvas();
         }
-        ShowCanvas();
     }
 
     public void OnPointerExit(PointerEventData eventData) {
@@ -113,14 +116,20 @@ public class Bot : MonoBehaviour,
         HideCanvas();
     }
 
+    /**
     public void OnPointerHover(PointerEventData eventData) {
-        //Make the canvas face towards the VR camera
-        Transform headTrans = subject.GetHeadTransform();
-        Vector3 relativePos = -(headTrans.position - canvasTrans.position);
-        Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
-        canvasTrans.rotation = rotation;
-        //Log.d(LOG_TAG, "head position: " + headTrans.position.ToString());
+        isControllerFocus = true;
+        //isReachable = checkSubjectReachable();
+        if (isReachable) {
+            subject.actStat = SubjectEvent.ActionStatus.Save;
+            //Make the canvas face towards the VR camera
+            Transform headTrans = subject.GetHeadTransform();
+            Vector3 relativePos = -(headTrans.position - canvasTrans.position);
+            canvasTrans.rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+            //Log.d(LOG_TAG, "head position: " + headTrans.position.ToString());
+        }
     }
+    */
 
     private void HideCanvas() {
         canvasGroup.alpha = 0f; //this makes everything transparent
@@ -128,14 +137,17 @@ public class Bot : MonoBehaviour,
     }
 
     private void ShowCanvas() {
+        Transform headTrans = subject.GetHeadTransform();
+        Vector3 relativePos = -(headTrans.position - canvasTrans.position);
+        canvasTrans.rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
     }
 
-    private bool checkReachable()
+    private bool checkSubjectReachable()
     {
         Vector2 subjectPos = subject.GetPosition2D();
-        Vector2 myPos = new Vector2(transform.position.x, transform.position.z);
         if (Vector2.Distance(subjectPos, myPos) <= reachableDistance) {
             return true;
         } else {

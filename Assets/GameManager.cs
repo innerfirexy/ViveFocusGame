@@ -13,24 +13,31 @@ public class GameManager : MonoBehaviour {
 
     public GameObject botPrefab;
     private List<Vector3> botPositions;
+    public int numBotTotal = 2;
+    public int numBotSaved = 0;
+    private List<int> savedBotIDs;
 
 	// Use this for initialization
 	void Start () {
         BeginGame();
 	}
 
+    private void Update() {
+        if (numBotSaved == numBotTotal) {
+            EndGame();
+        }
+    }
+
     private void BeginGame() {
         if (roomType == 1) {
             room1Instance = Instantiate(room1Prefab);
         }
 
-        // Define bot positions
-        botPositions = new List<Vector3> {
-            new Vector3(20f, 0f, 40f),
-        };
+        botPositions = new List<Vector3> { };
+        savedBotIDs = new List<int>();
 
-        // Spawn
-        SpawnBot();
+        //⚠️ Using Instantiate is problematic
+        //SpawnBot();
     }
 
     private void EndGame() {
@@ -41,8 +48,15 @@ public class GameManager : MonoBehaviour {
         if (room2Instance != null) {
             Destroy(room1Instance);
         }
+        Application.Quit();
     }
 
+    private void BC_BotSaved(int botID) {
+        numBotSaved += 1;
+        savedBotIDs.Add(botID);
+    }
+
+    /**
     private void SpawnBot()
     {
         Vector3 pos = new Vector3(20f, 0f, 40f);
@@ -60,9 +74,5 @@ public class GameManager : MonoBehaviour {
         rot = Quaternion.Euler(0, angleDegrees, 0);
         GameObject bot3 = Instantiate(botPrefab, pos, rot);
     }
-
-    void Update()
-    {
-        
-    }
+    */
 }

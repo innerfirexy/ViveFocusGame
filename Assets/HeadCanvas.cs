@@ -28,6 +28,11 @@ public class HeadCanvas : MonoBehaviour {
     private float sceneZ0; // maps to miniY0
     private Vector2 sceneSource;
 
+    private GameObject gmGO;
+    private GameManager gm;
+    private GameObject subjectGO;
+    private SubjectEvent subject;
+
     void Awake()
     {
         FPS = transform.GetChild(0).gameObject;
@@ -48,6 +53,11 @@ public class HeadCanvas : MonoBehaviour {
         sceneX0 = 5; 
         sceneZ0 = 5;
         sceneSource = new Vector2(sceneX0, sceneZ0);
+
+        gmGO = GameObject.Find("/Game Manager");
+        gm = gmGO.GetComponent<GameManager>();
+        subjectGO = GameObject.Find("/Subject");
+        subject = subjectGO.GetComponent<SubjectEvent>();
     }
 
     void OnEnable() {
@@ -74,6 +84,14 @@ public class HeadCanvas : MonoBehaviour {
         //}
         //textField.text = minimapCamera.enabled.ToString();
 
+        //textField.text = string.Format("Saved bot: {0}", gm.numBotSaved);
+
+        //textField.text = string.Format("my pos: {0}", subject.GetPosition2D().ToString());
+        //bot0 distance
+        float d0 = Vector2.Distance(subject.GetPosition2D(), new Vector2(20, 20));
+        float d1 = Vector2.Distance(subject.GetPosition2D(), new Vector2(16, 30));
+        textField.text = string.Format("d0: {0}, d1: {1}", d0, d1);
+
         //Show minimap or not
         if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Menu)) {
             ShowCanvas();
@@ -96,9 +114,8 @@ public class HeadCanvas : MonoBehaviour {
 
     private void BC_PlayerMoved(Transform tr)
     {
-        //textField.text = "BC_PlayerMoved triggered";
-        textField.text = string.Format("player position: ({0}, {1})",
-            miniPlayerRect.localPosition.x, miniPlayerRect.localPosition.y);
+        //textField.text = string.Format("player position: ({0}, {1})",
+        //    miniPlayerRect.localPosition.x, miniPlayerRect.localPosition.y);
 
         Vector2 currScenePos = new Vector2(tr.position.x, tr.position.z);
         Vector2 vec = currScenePos - sceneSource;
@@ -118,6 +135,6 @@ public class HeadCanvas : MonoBehaviour {
 
     private void BC_BotSaved(int botID)
     {
-        textField.text = string.Format("Bot #{0} saved", botID);
+        //textField.text = string.Format("Bot #{0} saved", botID);
     }
 }

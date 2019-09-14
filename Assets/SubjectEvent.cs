@@ -68,10 +68,10 @@ public class SubjectEvent : MonoBehaviour,
         }
 
         // Move
-        if (isTouchpadDown && !isTriggerDown) { // Move forward
+        if (isTouchpadDown && !isTriggerDown && actStat == ActionStatus.Walk) { // Move forward
             Move(true);
         }
-        if (!isTouchpadDown && isTriggerDown) { // Move backward
+        if (!isTouchpadDown && isTriggerDown && actStat == ActionStatus.Walk) { // Move backward
             Move(false);
         }
 	}
