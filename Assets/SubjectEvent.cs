@@ -51,6 +51,9 @@ public class SubjectEvent : MonoBehaviour,
         //Log.d(LOG_TAG, "child count of WaveVR: " + waveVRObj.transform.childCount.ToString());
         //Log.d(LOG_TAG, "isTouchpadDown: " + isTouchpadDown);
         //DebugInfo();
+
+        // Start the coroutine for broadcasting position
+        StartCoroutine("BroadcastPosition");
     }
 	
 	// Update is called once per frame
@@ -76,14 +79,12 @@ public class SubjectEvent : MonoBehaviour,
         }
 	}
 
-    void DebugInfo()
-    {
+    void DebugInfo() {
         Vector3 headFwd = headObj.transform.forward;
         Log.d(LOG_TAG, "head transform forward: " + headFwd.ToString());
     }
 
-    void Move(bool isForward)
-    {
+    void Move(bool isForward) {
         moveDirection = headObj.transform.forward;
         if (!isForward) {
             moveDirection.Set(-moveDirection.x, 0f, -moveDirection.z);
@@ -97,6 +98,17 @@ public class SubjectEvent : MonoBehaviour,
         BroadcastMessage("BC_PlayerMoved",
             GetHeadTransform(),
             SendMessageOptions.DontRequireReceiver);
+    }
+
+    IEnumerator BroadcastPosition()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+            BroadcastMessage("BC_PlayerMoved",
+                GetHeadTransform(),
+                SendMessageOptions.DontRequireReceiver);
+        }
     }
 
     public Vector3 GetForward()

@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
     public int numBotSaved = 0;
     private List<int> savedBotIDs;
 
+    public int timeLimit = 1200;
+
 	// Use this for initialization
 	void Start () {
         BeginGame();

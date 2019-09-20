@@ -11,7 +11,7 @@ public class HeadCanvas : MonoBehaviour {
     private Text debugText;
     private GameObject cdTextGO;
     private Text cdText; // countdown Text
-    public int timeLeft = 10;
+    private int timeLeft;
 
     private GameObject minimapCanvas;
     private GameObject minimapCameraObj;
@@ -66,6 +66,7 @@ public class HeadCanvas : MonoBehaviour {
         subject = subjectGO.GetComponent<SubjectEvent>();
 
         // Start timer
+        timeLeft = gm.timeLimit;
         StartCoroutine("DecrementTime");
         Time.timeScale = 1; // Making sure that the timeScale is right
     }
