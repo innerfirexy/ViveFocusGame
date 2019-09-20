@@ -8,7 +8,11 @@ using wvr;
 [RequireComponent(typeof(CanvasGroup))]
 public class HeadCanvas : MonoBehaviour {
     private GameObject FPS;
-    private Text textField;
+    private Text debugText;
+    private GameObject cdTextGO;
+    private Text cdText; // countdown Text
+    public int timeLeft = 10;
+
     private GameObject minimapCanvas;
     private GameObject minimapCameraObj;
     private Camera minimapCamera;
@@ -36,10 +40,12 @@ public class HeadCanvas : MonoBehaviour {
     void Awake()
     {
         FPS = transform.GetChild(0).gameObject;
-        textField = FPS.GetComponent<Text>();
-        textField.text = "";
-        minimapCanvas = transform.GetChild(1).gameObject;
+        debugText = FPS.GetComponent<Text>();
+        debugText.text = "";
+        cdTextGO = transform.GetChild(3).gameObject;
+        cdText = cdTextGO.GetComponent<Text>();
 
+        minimapCanvas = transform.GetChild(1).gameObject;
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
@@ -58,6 +64,10 @@ public class HeadCanvas : MonoBehaviour {
         gm = gmGO.GetComponent<GameManager>();
         subjectGO = GameObject.Find("/Subject");
         subject = subjectGO.GetComponent<SubjectEvent>();
+
+        // Start timer
+        StartCoroutine("DecrementTime");
+        Time.timeScale = 1; // Making sure that the timeScale is right
     }
 
     void OnEnable() {
@@ -74,29 +84,32 @@ public class HeadCanvas : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        //if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Trigger))
-        //{
-        //    textField.text = "Press on Trigger";
-        //}
-        //if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Touchpad))
-        //{
-        //    textField.text = "Press on Touchpad";
-        //}
-        //textField.text = minimapCamera.enabled.ToString();
-
-        //textField.text = string.Format("Saved bot: {0}", gm.numBotSaved);
-
-        //textField.text = string.Format("my pos: {0}", subject.GetPosition2D().ToString());
+        //debugText.text = string.Format("Saved bot: {0}", gm.numBotSaved);
+        debugText.text = string.Format("my pos: {0}", subject.GetPosition2D().ToString());
         //bot0 distance
-        float d0 = Vector2.Distance(subject.GetPosition2D(), new Vector2(20, 20));
-        float d1 = Vector2.Distance(subject.GetPosition2D(), new Vector2(16, 30));
-        textField.text = string.Format("d0: {0}, d1: {1}", d0, d1);
+        //float d0 = Vector2.Distance(subject.GetPosition2D(), new Vector2(20, 20));
+        //float d1 = Vector2.Distance(subject.GetPosition2D(), new Vector2(16, 30));
+        //debugText.text = string.Format("d0: {0}, d1: {1}", d0, d1);
 
         //Show minimap or not
         if (WaveVR_Controller.Input(mainControllerType).GetPress(WVR_InputId.WVR_InputId_Alias1_Menu)) {
             ShowCanvas();
         } else {
             HideCanvas();
+        }
+
+        // Update countdown time left
+        cdText.text = "剩余时间：" + timeLeft;
+        if (timeLeft <= 0) {
+            StopCoroutine("DecrementTime");
+            gmGO.BroadcastMessage("BC_Timesup", SendMessageOptions.DontRequireReceiver);
+        }
+    }
+
+    IEnumerator DecrementTime() {
+        while (true) {
+            yield return new WaitForSeconds(1);
+            timeLeft--;
         }
     }
 

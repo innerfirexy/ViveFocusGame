@@ -56,6 +56,10 @@ public class GameManager : MonoBehaviour {
         savedBotIDs.Add(botID);
     }
 
+    private void BC_Timesup() {
+        EndGame();
+    }
+
     /**
     private void SpawnBot()
     {
