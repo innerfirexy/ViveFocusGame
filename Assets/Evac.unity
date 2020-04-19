@@ -1491,7 +1491,7 @@ MonoBehaviour:
   room1Prefab: {fileID: 114043190338864822, guid: 4bd316fefe87a46c99cf4610c8fcb16b,
     type: 2}
   botPrefab: {fileID: 1802311862934830, guid: f2796da9d0fde498c83d075a2d6ded39, type: 2}
-  numBotTotal: 2
+  numBotTotal: 6
   numBotSaved: 0
   timeLimit: 1200
 --- !u!4 &1133542571
